@@ -1,0 +1,5 @@
+fastapi
+passlib
+pydantic==1.10.11
+python-jose
+uvicorn
