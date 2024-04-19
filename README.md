@@ -22,3 +22,13 @@ Para rodar a API localmente com o Docker, você pode executar o seguinte comando
 ```bash
 docker-compose up --build
 ```
+
+# database
+
+para conectar ao banco de dados. 
+
+```bash
+source .env.sh
+```
+
+Nota: para usar o banco de dados, você deve ter o arquivo `.env.sh` criado. E rodar o projeto localmente.
