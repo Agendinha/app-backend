@@ -53,7 +53,7 @@ async def get_database():
     return await asyncpg.connect(DATABASE_URL)
 
 # Rota para resetar o banco de dados
-@app.post("/db-reset/")
+@app.post("/api/v1/db-reset/")
 async def reset_database():
     try:
         # Conecta ao banco de dados
@@ -91,7 +91,7 @@ async def user_exists(username: str):
         raise HTTPException(status_code=500, detail=f"Failed to check if user exists: {str(e)}")
 
 # Função para registrar um usuário
-@app.post("/register/")
+@app.post("/api/v1/register/")
 async def register_user(user: User):
     try:
         conn = await get_database()
@@ -122,7 +122,7 @@ async def register_user(user: User):
 
 
 # Função para autenticar um usuário
-@app.post("/login/")
+@app.post("/api/v1/login/")
 async def login_user(user: User):
     try:
         # Conecta ao banco de dados
@@ -140,3 +140,8 @@ async def login_user(user: User):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Login failed: {str(e)}")
     return {"access_token": access_token, "token_type": "bearer"}
+
+# função para healthcheck
+@app.get("/api/v1/healthcheck/")
+async def healthcheck():
+    return {"status": "ok"}
