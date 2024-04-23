@@ -8,108 +8,222 @@
 	},
 	"item": [
 		{
-			"name": "Post data Register",
-			"event": [
+			"name": "LOCAL",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Successful POST request\", function () {",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-							"});",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"username\": \"lrgsouza\",\n    \"password\": \"lucas\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"name": "Post data Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
-					}
-				},
-				"url": {
-					"raw": "{{base_url}}/register/",
-					"host": [
-						"{{base_url}}"
 					],
-					"path": [
-						"register",
-						""
-					]
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"lrgsouza@ges.inatel.br\",\n    \"password\": \"lucas\",\n    \"name\": \"Lucas Ribeiro Garcia de Souza\",\n    \"phone\": \"019993447675\",\n    \"usertype\": \"parceiro\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/register/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register",
+								""
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
 				},
-				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
-			},
-			"response": []
+				{
+					"name": "Post data Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"lrgsouza@ges.inatel.br\",\n    \"password\": \"lucas\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/login/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login",
+								""
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "reset db",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/db-reset/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"db-reset",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "Post data Login",
-			"event": [
+			"name": "PROD",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Successful POST request\", function () {",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
-							"});",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"username\": \"lrgsouza\",\n    \"password\": \"lucas\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"name": "Post data Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
-					}
-				},
-				"url": {
-					"raw": "{{base_url}}/login/",
-					"host": [
-						"{{base_url}}"
 					],
-					"path": [
-						"login",
-						""
-					]
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"lrgsouza@ges.inatel.br\",\n    \"password\": \"lucas\",\n    \"name\": \"Lucas Ribeiro Garcia de Souza\",\n    \"phone\": \"019993447675\",\n    \"usertype\": \"parceiro\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_prod}}/register/",
+							"host": [
+								"{{base_url_prod}}"
+							],
+							"path": [
+								"register",
+								""
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
 				},
-				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
-			},
-			"response": []
-		},
-		{
-			"name": "reset db",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/db-reset/",
-					"host": [
-						"{{base_url}}"
+				{
+					"name": "Post data Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
 					],
-					"path": [
-						"db-reset",
-						""
-					]
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"lrgsouza@ges.inatel.br\",\n    \"password\": \"lucas\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_prod}}/login/",
+							"host": [
+								"{{base_url_prod}}"
+							],
+							"path": [
+								"login",
+								""
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "reset db",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_prod}}/db-reset/",
+							"host": [
+								"{{base_url_prod}}"
+							],
+							"path": [
+								"db-reset",
+								""
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	],
 	"event": [
@@ -139,7 +253,12 @@
 		},
 		{
 			"key": "base_url",
-			"value": "http://127.0.0.1:8000"
+			"value": "http://127.0.0.1:8000/api/v1"
+		},
+		{
+			"key": "base_url_prod",
+			"value": "https://agendinha-backend-a5lrxmg3fa-uc.a.run.app/api/v1",
+			"type": "string"
 		}
 	]
 }
