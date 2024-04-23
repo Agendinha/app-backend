@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from passlib.context import CryptContext
 from typing import Optional
 from jose import JWTError, jwt
@@ -17,6 +18,15 @@ class User(BaseModel):
 
 
 app = FastAPI()
+
+# Adicione o middleware CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Usaremos este exemplo apenas para fins de demonstração.
 # Em um ambiente de produção, você deve armazenar as senhas de forma segura,
@@ -142,6 +152,6 @@ async def login_user(user: User):
     return {"access_token": access_token, "token_type": "bearer"}
 
 # função para healthcheck
-@app.get("/api/v1/healthcheck/")
+@app.get("/")
 async def healthcheck():
     return {"status": "ok"}
