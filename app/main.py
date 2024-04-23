@@ -9,10 +9,10 @@ import os
 
 # Definição do modelo de usuário
 class User(BaseModel):
-    username: str
+    email: str
     password: str
+    name: str = None
     phone: str = None
-    postalcode: str = None
     usertype: str = None
 
 
@@ -63,10 +63,10 @@ async def reset_database():
         await conn.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
-                username VARCHAR(100) UNIQUE NOT NULL,
+                email VARCHAR(100) UNIQUE NOT NULL,
                 password VARCHAR(100) NOT NULL,
+                name VARCHAR(100),
                 phone VARCHAR(20),
-                postalcode VARCHAR(10),
                 usertype VARCHAR(20)
             );
         """)
@@ -77,13 +77,13 @@ async def reset_database():
         raise HTTPException(status_code=500, detail=f"Failed to reset database: {str(e)}")
 
 # Função para verificar se um usuário já existe
-async def user_exists(username: str):
+async def user_exists(email: str):
     conn = await get_database()
     try:
         query = """
-            SELECT 1 FROM "users" WHERE username = $1
+            SELECT 1 FROM "users" WHERE email = $1
         """
-        result = await conn.fetchrow(query, username)   
+        result = await conn.fetchrow(query, email)   
         # Verifica se o resultado é None
         await conn.close()
         return result is not None
@@ -99,7 +99,7 @@ async def register_user(user: User):
         raise HTTPException(status_code=500, detail=f"Failed to connect to database: {str(e)}")
     
     # Verifica se o usuário já existe
-    if await user_exists(user.username):
+    if await user_exists(user.email):
         raise HTTPException(status_code=400, detail="User already exists")
         
     try:
@@ -108,10 +108,10 @@ async def register_user(user: User):
         
         # Insere o usuário no banco de dados
         query = """
-            INSERT INTO "users" (username, password, phone, postalcode, usertype)
+            INSERT INTO "users" (email, password, name, phone, usertype)
             VALUES ($1, $2, $3, $4, $5)
         """
-        await conn.execute(query, user.username, hashed_password, user.phone, user.postalcode, user.usertype)
+        await conn.execute(query, user.email, hashed_password, user.name, user.phone, user.usertype)
         
         # Fecha a conexão com o banco de dados
         await conn.close()
@@ -128,15 +128,15 @@ async def login_user(user: User):
         # Conecta ao banco de dados
         conn = await get_database()
         query = """
-            SELECT * FROM "users" WHERE username = $1
+            SELECT * FROM "users" WHERE email = $1
         """
-        record = await conn.fetchrow(query, user.username)
+        record = await conn.fetchrow(query, user.email)
         if record is None:
-            raise HTTPException(status_code=401, detail="Invalid username or password")
+            raise HTTPException(status_code=401, detail="Invalid email or password")
         stored_password = record["password"]
         if not pwd_context.verify(user.password, stored_password):
-            raise HTTPException(status_code=401, detail="Invalid username or password")
-        access_token = create_access_token(data={"sub": user.username})
+            raise HTTPException(status_code=401, detail="Invalid email or password")
+        access_token = create_access_token(data={"sub": user.email})
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Login failed: {str(e)}")
     return {"access_token": access_token, "token_type": "bearer"}
