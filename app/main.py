@@ -16,6 +16,9 @@ class User(BaseModel):
     phone: str = None
     usertype: str = None
 
+class LoginUser(BaseModel):
+    email: str
+    password: str
 
 app = FastAPI()
 
@@ -133,12 +136,12 @@ async def register_user(user: User):
 
 # Função para autenticar um usuário
 @app.post("/api/v1/login/")
-async def login_user(user: User):
+async def login_user(user: LoginUser):
     try:
         # Conecta ao banco de dados
         conn = await get_database()
         query = """
-            SELECT * FROM "users" WHERE email = $1
+            SELECT password FROM "users" WHERE email = $1
         """
         record = await conn.fetchrow(query, user.email)
         if record is None:
