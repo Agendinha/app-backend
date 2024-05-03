@@ -72,10 +72,12 @@ async def login_user(user: UserLogin):
 
         if record is None:
             raise HTTPException(status_code=401, detail="Invalid email or password")
-        stored_password = record["password"]
+        stored_password = record
+
         if not pwd_context.verify(user.password, stored_password):
             raise HTTPException(status_code=401, detail="Invalid email or password")
         access_token = create_access_token(data={"sub": user.email})
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Login failed: {str(e)}")
     return {"access_token": access_token, "token_type": "bearer"}
