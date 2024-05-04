@@ -2,11 +2,10 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from passlib.context import CryptContext
 from typing import Optional
-from jose import JWTError, jwt
+from jose import jwt
 from datetime import datetime, timedelta
-import asyncpg
 import os
-from model import User, UserBase, UserLogin
+from model import UserBase, UserLogin
 
 
 app = FastAPI()

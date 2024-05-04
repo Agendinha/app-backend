@@ -1,7 +1,7 @@
 import os
 import asyncpg
 
-init_sql = "/home/airtong/Documents/app-backend/db/init.sql"
+init_sql = os.getenv("INIT_SQL", None)
 
 class Database:
     @staticmethod
