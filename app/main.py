@@ -5,8 +5,8 @@ from typing import Optional
 from jose import jwt
 from datetime import datetime, timedelta
 import os
-from model import UserBase, UserLogin
-
+from app.model import UserBase, UserLogin
+from app.dao import UserDAO, Database
 
 app = FastAPI()
 
@@ -49,14 +49,12 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 # Rota para resetar o banco de dados
 @app.post("/api/v1/db-reset/")
 async def reset_database():
-    from dao import Database
     await Database.reset_database()
     return {"message": "Database reset successfully"}
 
 # Função para registrar um usuário
 @app.post("/api/v1/register/")
 async def register_user(user: UserBase):
-    from dao import UserDAO
     result = await UserDAO.insert(user)
     
     if result is not None:
@@ -66,7 +64,6 @@ async def register_user(user: UserBase):
 @app.post("/api/v1/login/")
 async def login_user(user: UserLogin):
     try:
-        from dao import UserDAO
         record = await UserDAO.get_password(user.email)
 
         if record is None:

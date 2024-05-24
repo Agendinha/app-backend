@@ -1,1 +1,1 @@
-from model.user import User, UserBase, UserLogin
+from app.model.user import User, UserBase, UserLogin
