@@ -5,3 +5,6 @@ python-jose
 uvicorn
 asyncpg
 bcrypt
+pytest
+httpx
+pytest-mock
