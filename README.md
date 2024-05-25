@@ -1,5 +1,5 @@
 # app-backend
-
+[![Running Tests](https://github.com/Agendinha/app-backend/actions/workflows/test.yaml/badge.svg)](https://github.com/Agendinha/app-backend/actions/workflows/test.yaml)
 
 Para rodar a API localmente, você precisa executar o script Python que contém sua aplicação FastAPI.
 
