@@ -5,13 +5,14 @@ from typing import Optional
 from jose import jwt
 from datetime import datetime, timedelta
 import os
-from app.model import UserBase, UserLogin
-from app.dao import UserDAO, Database
+from model.user import UserBase, UserLogin
+from dao.user import UserDAO
+from dao.database import Database
 
-app = FastAPI()
+appServer = FastAPI()
 
 # Adicione o middleware CORS
-app.add_middleware(
+appServer.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
@@ -47,13 +48,13 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 # Rota para resetar o banco de dados
-@app.post("/api/v1/db-reset/")
+@appServer.post("/api/v1/db-reset/")
 async def reset_database():
     await Database.reset_database()
     return {"message": "Database reset successfully"}
 
 # Função para registrar um usuário
-@app.post("/api/v1/register/")
+@appServer.post("/api/v1/register/")
 async def register_user(user: UserBase):
     result = await UserDAO.insert(user)
     
@@ -61,7 +62,7 @@ async def register_user(user: UserBase):
         return {"message": "User registered successfully"}
 
 # Função para autenticar um usuário
-@app.post("/api/v1/login/")
+@appServer.post("/api/v1/login/")
 async def login_user(user: UserLogin):
     try:
         record = await UserDAO.get_password(user.email)
@@ -79,6 +80,6 @@ async def login_user(user: UserLogin):
     return {"access_token": access_token, "token_type": "bearer"}
 
 # função para healthcheck
-@app.get("/")
+@appServer.get("/")
 async def healthcheck():
     return {"status": "ok"}

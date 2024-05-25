@@ -1,7 +1,7 @@
 import os
 import asyncpg
 
-init_sql = os.getenv("INIT_SQL", None)
+init_sql = os.getenv("INIT_SQL", "db/init.sql")
 
 class Database:
     @staticmethod
