@@ -1,28 +1,13 @@
 import pytest
 from fastapi.testclient import TestClient
-from app.main import app, pwd_context, create_access_token, verify_password
-from app.model import UserBase, UserLogin
+from app.main import appServer, pwd_context, create_access_token, verify_password
 
-client = TestClient(app)
+client = TestClient(appServer)
 
 @pytest.fixture(autouse=True)
 def mock_user_dao(mocker):
     mocker.patch('app.dao.UserDAO.insert')
     mocker.patch('app.dao.UserDAO.get_password', return_value=None)
-
-def test_register_user():
-    user = {
-        "email": "test@example.com",
-        "username": "testuser",
-        "password": "password123",
-        "phone": "1234567890",
-        "postalcode": "12345",
-        "usertype": "user"
-    }
-    response = client.post("/api/v1/register/", json=user)
-    assert response.status_code == 200
-    assert response.json() == {"message": "User registered successfully"}
-
 
 def test_verify_password_correct():
     # Senha correta

@@ -16,7 +16,7 @@ COPY ./db /app/db
 EXPOSE 8000
 
 # Importante para importações estáticas
-ENV PYTHONPATH="$PYTHONPATH:/app"
+ENV PYTHONPATH="/"
 
 # Comando para executar a aplicação quando o contêiner for iniciado
 CMD ["uvicorn", "main:appServer", "--host", "0.0.0.0", "--port", "8000"]
