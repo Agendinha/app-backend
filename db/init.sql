@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS "schedule" CASCADE;
 
 CREATE TABLE IF NOT EXISTS "user" (
     id SERIAL PRIMARY KEY,
+    email VARCHAR(100) UNIQUE NOT NULL,
     username VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
     usertype VARCHAR(100) DEFAULT 'customer' -- change it to admin if needed
