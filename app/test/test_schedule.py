@@ -5,7 +5,7 @@ from model.schedule import ScheduleCreate, ScheduleUpdate, ScheduleBase
 from dao.schedule import ScheduleDAO
 
 @pytest.mark.asyncio
-@patch("app.dao.schedule.get_database", new_callable=AsyncMock)
+@patch("dao.schedule.get_database", new_callable=AsyncMock)
 async def test_get_schedule(mock_get_database):
     mock_conn = mock_get_database.return_value
     mock_conn.fetchrow.return_value = {
@@ -23,7 +23,7 @@ async def test_get_schedule(mock_get_database):
     assert result.start_time == datetime(2023, 1, 1, 10, 0)
 
 @pytest.mark.asyncio
-@patch("app.dao.schedule.get_database", new_callable=AsyncMock)
+@patch("dao.schedule.get_database", new_callable=AsyncMock)
 async def test_get_all_schedules(mock_get_database):
     # Arrange
     mock_conn = mock_get_database.return_value
