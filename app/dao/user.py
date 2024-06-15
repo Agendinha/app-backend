@@ -21,11 +21,11 @@ class UserDAO:
 
         try:
             query = """
-                INSERT INTO "user" (email, username, password, phone, postalcode, usertype)
-                VALUES ($1, $2, $3, $4, $5, $6)
+                INSERT INTO "user" (email, username, password)
+                VALUES ($1, $2, $3)
             """
             async with conn.transaction():
-                result = await conn.execute(query, user.email, user.username, hashed_password, user.phone, user.postalcode, user.usertype)
+                result = await conn.execute(query, user.email, user.username, hashed_password)
                 return result
             
         except Exception as e:
