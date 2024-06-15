@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from passlib.context import CryptContext
 from typing import Optional
 from jose import jwt
@@ -8,6 +9,11 @@ import os
 from model.user import UserBase, UserLogin
 from dao.user import UserDAO
 from dao.database import Database
+
+from typing import List
+from model.schedule import ScheduleBase, ScheduleCreate, ScheduleUpdate  # Importar os modelos de schedule
+from dao.schedule import ScheduleDAO  # Importar o DAO de schedule
+
 
 appServer = FastAPI()
 
@@ -83,3 +89,36 @@ async def login_user(user: UserLogin):
 @appServer.get("/")
 async def healthcheck():
     return {"status": "ok"}
+
+@appServer.post("/api/v1/schedules/", response_model=ScheduleBase)
+async def create_schedule(schedule: ScheduleCreate):
+    result = await ScheduleDAO.insert(schedule)
+    if result is None:
+        raise HTTPException(status_code=400, detail="Error creating schedule")
+    return result
+
+@appServer.get("/api/v1/schedules/", response_model=List[ScheduleBase])
+async def get_schedules():
+    schedules = await ScheduleDAO.get_all()
+    return schedules
+
+@appServer.get("/api/v1/schedules/{schedule_id}", response_model=ScheduleBase)
+async def get_schedule(schedule_id: int):
+    schedule = await ScheduleDAO.get(schedule_id)
+    if schedule is None:
+        raise HTTPException(status_code=404, detail="Schedule not found")
+    return schedule
+
+@appServer.put("/api/v1/schedules/{schedule_id}", response_model=ScheduleBase)
+async def update_schedule(schedule_id: int, schedule: ScheduleUpdate):
+    result = await ScheduleDAO.update(schedule_id, schedule)
+    if result is None:
+        raise HTTPException(status_code=400, detail="Error updating schedule")
+    return result
+
+@appServer.delete("/api/v1/schedules/{schedule_id}")
+async def delete_schedule(schedule_id: int):
+    result = await ScheduleDAO.delete(schedule_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="Schedule not found")
+    return {"message": "Schedule deleted successfully"}
