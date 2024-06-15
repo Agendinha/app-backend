@@ -1,6 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
-from app.main import appServer, pwd_context, create_access_token, verify_password
+from main import appServer, pwd_context, create_access_token, verify_password
 
 client = TestClient(appServer)
 

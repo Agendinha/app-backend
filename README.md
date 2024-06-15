@@ -4,7 +4,9 @@
 Para rodar a API localmente, você precisa executar o script Python que contém sua aplicação FastAPI.
 
 ```bash
-uvicorn main:app --reload
+cd app/
+source .env.sh
+uvicorn main:appServer --reload
 ```
 
 Isso iniciará o servidor Uvicorn e sua aplicação FastAPI. O parâmetro `--reload` faz com que o servidor reinicie automaticamente sempre que você fizer alterações no código-fonte, o que é útil durante o desenvolvimento.

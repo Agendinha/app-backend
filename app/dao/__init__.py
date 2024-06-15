@@ -1,2 +1,2 @@
-from app.dao.user import UserDAO
-from app.dao.database import Database
+from dao.user import UserDAO
+from dao.database import Database
