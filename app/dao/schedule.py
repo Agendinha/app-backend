@@ -18,7 +18,7 @@ class ScheduleDAO:
                 RETURNING id, customer_id, service, start_time
             """
             async with conn.transaction():
-                record = await conn.fetchrow(query, schedule.customer_id, schedule.service_id, start_time)
+                record = await conn.fetchrow(query, schedule.customer_id, schedule.service, start_time)
                 return ScheduleBase(**record)
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to insert schedule: {str(e)}")
