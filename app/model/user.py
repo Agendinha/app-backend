@@ -12,7 +12,7 @@ class UserLogin(BaseModel):
     password: str
 
 class User(json.JSONEncoder):
-    def __init__(self, id, email, username, password, usertype = "customer"):
+    def __init__(self, id, email, username, password, usertype):
         self.id = id
         self.email = email
         self.username = username
