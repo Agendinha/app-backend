@@ -65,7 +65,14 @@ async def register_user(user: UserBase):
     result = await UserDAO.insert(user)
     
     if result is not None:
-        return {"message": "User registered successfully"}
+        try:
+            user = await UserDAO.get(email=user.email)
+            user = user[0]
+            #remove password from response
+            user = {key: value for key, value in user.items() if key != "password"}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to get user: {str(e)}")
+        return {"message": "User registered successfully", "user": user}
 
 # Função para autenticar um usuário
 @appServer.post("/api/v1/login/")
@@ -83,7 +90,16 @@ async def login_user(user: UserLogin):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Login failed: {str(e)}")
-    return {"access_token": access_token, "token_type": "bearer"}
+    #pick username, usertype and id
+    try:
+        user = await UserDAO.get(email=user.email)
+        user = user[0]
+        #remove password from response
+        user = {key: value for key, value in user.items() if key != "password"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get user: {str(e)}")
+
+    return {"access_token": access_token, "token_type": "bearer", "user": user}
 
 # função para healthcheck
 @appServer.get("/")
