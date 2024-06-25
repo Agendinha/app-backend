@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from passlib.context import CryptContext
 from typing import Optional
 from jose import jwt
@@ -8,6 +9,11 @@ import os
 from model.user import UserBase, UserLogin
 from dao.user import UserDAO
 from dao.database import Database
+
+from typing import List
+from model.schedule import ScheduleBase, ScheduleCreate, ScheduleUpdate  # Importar os modelos de schedule
+from dao.schedule import ScheduleDAO  # Importar o DAO de schedule
+
 
 appServer = FastAPI()
 
@@ -59,7 +65,14 @@ async def register_user(user: UserBase):
     result = await UserDAO.insert(user)
     
     if result is not None:
-        return {"message": "User registered successfully"}
+        try:
+            user = await UserDAO.get(email=user.email)
+            user = user[0]
+            #remove password from response
+            user = {key: value for key, value in user.items() if key != "password"}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to get user: {str(e)}")
+        return {"message": "User registered successfully", "user": user}
 
 # Função para autenticar um usuário
 @appServer.post("/api/v1/login/")
@@ -77,9 +90,51 @@ async def login_user(user: UserLogin):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Login failed: {str(e)}")
-    return {"access_token": access_token, "token_type": "bearer"}
+    #pick username, usertype and id
+    try:
+        user = await UserDAO.get(email=user.email)
+        user = user[0]
+        #remove password from response
+        user = {key: value for key, value in user.items() if key != "password"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get user: {str(e)}")
+
+    return {"access_token": access_token, "token_type": "bearer", "user": user}
 
 # função para healthcheck
 @appServer.get("/")
 async def healthcheck():
     return {"status": "ok"}
+
+@appServer.post("/api/v1/schedules/", response_model=ScheduleBase)
+async def create_schedule(schedule: ScheduleCreate):
+    result = await ScheduleDAO.insert(schedule)
+    if result is None:
+        raise HTTPException(status_code=400, detail="Error creating schedule")
+    return result
+
+@appServer.get("/api/v1/schedules/", response_model=List[ScheduleBase])
+async def get_schedules():
+    schedules = await ScheduleDAO.get_all()
+    return schedules
+
+@appServer.get("/api/v1/schedules/{schedule_id}", response_model=ScheduleBase)
+async def get_schedule(schedule_id: int):
+    schedule = await ScheduleDAO.get(schedule_id)
+    if schedule is None:
+        raise HTTPException(status_code=404, detail="Schedule not found")
+    return schedule
+
+@appServer.put("/api/v1/schedules/{schedule_id}", response_model=ScheduleBase)
+async def update_schedule(schedule_id: int, schedule: ScheduleUpdate):
+    result = await ScheduleDAO.update(schedule_id, schedule)
+    if result is None:
+        raise HTTPException(status_code=400, detail="Error updating schedule")
+    return result
+
+@appServer.delete("/api/v1/schedules/{schedule_id}")
+async def delete_schedule(schedule_id: int):
+    result = await ScheduleDAO.delete(schedule_id)
+    if not result:
+        raise HTTPException(status_code=404, detail="Schedule not found")
+    return {"message": "Schedule deleted successfully"}
