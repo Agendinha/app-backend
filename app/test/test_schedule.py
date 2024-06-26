@@ -11,6 +11,7 @@ async def test_get_schedule(mock_get_database):
     mock_conn.fetchrow.return_value = {
         "id": 1,
         "customer_id": 1,
+        "username": "user1",
         "service": "Cabelo",
         "start_time": datetime(2023, 1, 1, 10, 0)
     }
@@ -19,6 +20,7 @@ async def test_get_schedule(mock_get_database):
 
     assert result.id == 1
     assert result.customer_id == 1
+    assert result.username == "user1"
     assert result.service == "Cabelo"
     assert result.start_time == datetime(2023, 1, 1, 10, 0)
 
@@ -31,12 +33,14 @@ async def test_get_all_schedules(mock_get_database):
         {
             "id": 1,
             "customer_id": 1,
+            "username": "user1",
             "service": "Cabelo",
             "start_time": datetime(2023, 1, 1, 10, 0)
         },
         {
             "id": 2,
             "customer_id": 2,
+            "username": "user2",
             "service": "Barba",
             "start_time": datetime(2023, 1, 2, 10, 0)
         }
