@@ -13,12 +13,12 @@ class ScheduleDAO:
             start_time = schedule.start_time.replace(tzinfo=None)
 
             query = """
-                INSERT INTO schedule (customer_id, service, start_time)
-                VALUES ($1, $2, $3)
-                RETURNING id, customer_id, service, start_time
+                INSERT INTO schedule (customer_id, username, service, start_time)
+                VALUES ($1, $2, $3, $4)
+                RETURNING id, customer_id, username, service, start_time
             """
             async with conn.transaction():
-                record = await conn.fetchrow(query, schedule.customer_id, schedule.service, start_time)
+                record = await conn.fetchrow(query, schedule.customer_id, schedule.username, schedule.service, start_time)
                 return ScheduleBase(**record)
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to insert schedule: {str(e)}")
@@ -30,7 +30,7 @@ class ScheduleDAO:
         conn = await get_database()
         try:
             query = """
-                SELECT id, customer_id, service, start_time FROM schedule
+                SELECT id, customer_id, username, service, start_time FROM schedule
             """
             records = await conn.fetch(query)
             return [ScheduleBase(**record) for record in records]
@@ -44,7 +44,7 @@ class ScheduleDAO:
         conn = await get_database()
         try:
             query = """
-                SELECT id, customer_id, service, start_time FROM schedule WHERE id = $1
+                SELECT id, customer_id, username, service, start_time FROM schedule WHERE id = $1
             """
             record = await conn.fetchrow(query, schedule_id)
             if record:
@@ -64,7 +64,7 @@ class ScheduleDAO:
             set_clause = ", ".join([f"{key} = ${i+2}" for i, key in enumerate(update_data.keys())])
             query = f"""
                 UPDATE schedule SET {set_clause} WHERE id = $1
-                RETURNING id, customer_id, service, start_time
+                RETURNING id, customer_id, username, service, start_time
             """
             if "start_time" in update_data:
                 update_data["start_time"] = update_data["start_time"].replace(tzinfo=None)

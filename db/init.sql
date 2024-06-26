@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS "user" (
 CREATE TABLE IF NOT EXISTS "schedule" (
     id SERIAL PRIMARY KEY,
     customer_id INT NOT NULL,
+    username VARCHAR NOT NULL,
     service VARCHAR NOT NULL,
     start_time TIMESTAMP NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES "user"(id)
